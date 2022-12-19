@@ -1,34 +1,27 @@
-const { application } = require("express");
 const express = require("express");
-const fs = require('fs');
 const app = express();
-const port = 8080;
+const videos = require('./routes/videos');
 
-app.use(express.json());
+// Configuration
+require("dotenv").config();
+const PORT = process.env.PORT || 8080;
 
-fs.readFile('data/videos.json', (error, data) => {
-    if (error) {
-        // handle the error
-    } else {
-        // use the data
-    }
-    const jsonData = JSON.parse(data)
+console.log("PORT");
+console.log(PORT)
+// Middleware
+app.use((req, _res, next) => {
+    console.log(`this is the middleware`);
+    next();
 });
 
+app.use('/videos', videos)
 
+app.use(express.static('public'));
+// // Home Route
+// app.get('/', (_request, response) => {
+//     response.send("Hello World");
+// });
 
-app.listen(port, () => {
-    console.log(`API server listening on ${port}`)
-})
-
-app.get('/videos', (request, response) => {
-    response.send({});
-});
-
-app.get('/videos/:id', (request, response) => {
-    response.send({});
-});
-
-app.post('/videos', (request, response) => {
-    response.send({});
+app.listen(PORT, () => {
+    console.log(`API server listening on ${PORT}`);
 });
