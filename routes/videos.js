@@ -5,13 +5,14 @@ const fs = require('fs');
 const uniqid = require('uniqid');
 const url = require('url');
 
+
 function readVideos() {
     const videoFile = fs.readFileSync('./data/videos.json');
     const videosData = JSON.parse(videoFile);
     return videosData;
 }
 
-routes.get('/', (req, res) => {
+routes.get('/', (req, response) => {
     const videosData = readVideos();
 
     const strippedData = videosData.map((video) => {
@@ -28,17 +29,17 @@ routes.get('/', (req, res) => {
         };
     });
 
-    res.json(strippedData);
+    response.json(strippedData);
 });
 
-routes.get('/:id', (req, res) => {
+routes.get('/:id', (req, response) => {
     const videoRequested = url.parse(req.url)
     const videoId = videoRequested.pathname.replace('/', '')
 
     const videoData = readVideos();
     const filteredVideo = videoData.filter(video => video.id === videoId)[0]
 
-    res.json(filteredVideo);
+    response.json(filteredVideo);
 });
 
 function writeVideos(data) {
@@ -46,13 +47,20 @@ function writeVideos(data) {
     fs.writeFileSync('./data/videos.json', stringifiedData)
 }
 
-routes.post('/upload', (_req, res) => {
+routes.post('/videos', (_request, res) => {
     const videosData = readVideos();
 
     const newVideo = {
         id: uniqid(),
-        title: _req.body.title,
-        description: 'Placeholder description'
+        title: _request.body.title,
+        channel: 'New video uploaded',
+        image: '',
+        description: _request.body.description,
+        views: '2004',
+        likes: '66,040',
+        duration: "4:01",
+        timestamp: 1632344461000,
+        comments: "Hello World"
     };
 
     videosData.push(newVideo);
@@ -63,45 +71,3 @@ routes.post('/upload', (_req, res) => {
 })
 
 module.exports = routes;
-
-
-
-
-
-
-
-
-
-
-
-// const express = require('express');
-// const router = express.Router();
-// const fs = require('fs');
-// const { uuid } = require('uuid');
-
-// router.use(express.json());
-
-// const videos_filepath = "./data/videos.json";
-
-// // router function for GET requests
-
-// router.route('/').get((req, res) => {
-//     // get videos data from videos.json
-//     // copy the array of video object and assign to a new variable and return response.
-// })
-
-// // app.get('/videos', (request, response) => {
-// //     response.send({});
-// // });
-
-// // 
-
-// app.get('/videos/:id', (request, response) => {
-//     response.send({});
-// });
-
-
-
-// app.post('/videos', (request, response) => {
-//     response.send({});
-// });
