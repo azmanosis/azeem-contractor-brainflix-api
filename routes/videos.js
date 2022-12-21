@@ -1,10 +1,12 @@
-const { response } = require('express');
 const express = require('express');
 const routes = express.Router();
 const fs = require('fs');
 const uniqid = require('uniqid');
 const url = require('url');
-
+const bodyparse = require('body-parser')
+routes.use(bodyparse.json());
+routes.use(bodyparse.urlencoded({ extended: true }));
+// routes.use(express.urlencoded({ extended: true }));
 
 function readVideos() {
     const videoFile = fs.readFileSync('./data/videos.json');
@@ -47,27 +49,30 @@ function writeVideos(data) {
     fs.writeFileSync('./data/videos.json', stringifiedData)
 }
 
-routes.post('/videos', (_request, res) => {
+routes.post('/', (req, res) => {
+
     const videosData = readVideos();
+    const { title, description } = req.body;
 
     const newVideo = {
         id: uniqid(),
-        title: _request.body.title,
+        title,
         channel: 'New video uploaded',
-        image: '',
-        description: _request.body.description,
+        image: "http://localhost:8080/Upload-video-preview.jpg",
+        description,
         views: '2004',
         likes: '66,040',
         duration: "4:01",
-        timestamp: 1632344461000,
+        timestamp: '08/09/2022',
         comments: "Hello World"
     };
+
 
     videosData.push(newVideo);
 
     writeVideos(videosData);
 
     res.status(201).json(newVideo);
-})
+});
 
 module.exports = routes;
