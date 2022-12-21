@@ -6,7 +6,6 @@ const url = require('url');
 const bodyparse = require('body-parser')
 routes.use(bodyparse.json());
 routes.use(bodyparse.urlencoded({ extended: true }));
-// routes.use(express.urlencoded({ extended: true }));
 
 function readVideos() {
     const videoFile = fs.readFileSync('./data/videos.json');
