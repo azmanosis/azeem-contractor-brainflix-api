@@ -57,14 +57,9 @@ routes.post('/', (req, res) => {
     const newVideo = {
         id: uniqid(),
         title,
-        channel: 'New video uploaded',
+        channel: 'Look at me!',
         image: "http://localhost:8080/Upload-video-preview.jpg",
         description,
-        views: '2004',
-        likes: '66,040',
-        duration: "4:01",
-        timestamp: '08/09/2022',
-        comments: "Hello World"
     };
 
 
